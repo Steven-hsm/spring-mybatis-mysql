@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="  
+           http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<!-- 配置数据源 -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://192.168.236.131:3306/test" />
+		<property name="username" value="root" />
+		<property name="password" value="1994713" />
+	</bean>
+
+	<!-- 配置mybatis的会话工厂,没有spring时,需要手建,spring容器可以自动注入 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:conf/MyBatisConf.xml" />
+		<!-- <property name="typeAliasesPackage" value="com.tiantian.ckeditor.model" 
+			/> -->
+	</bean>
+	<!-- 配置userMapper -->
+	  <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+       <property name="mapperInterface"  
+           value="com.mucfc.mapper.UserMapper" />  
+       <property name="sqlSessionFactory" ref="sqlSessionFactory" />  
+    </bean> 
+	<!-- 自动扫描注解的bean -->
+	<context:component-scan base-package="com.mucfc.dao" />
+
+</beans>
